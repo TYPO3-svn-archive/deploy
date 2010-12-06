@@ -37,7 +37,7 @@ done
 
 # Database parameters
 if [ "$RETRIEVEDBDATA" -ne 0 ] ; then
-	echo "Retrieving db data from local.xml"
+	echo "Retrieving db data automatically"
 	. `cd -- "$(dirname -- "$0")" && pwd`/retrieve_dbdata.sh
 fi
 if [ "$USERNAME" == "" ] || [[ "$USERNAME" == *{{*}}* ]]; then echo "No username found"; exit 1; fi
@@ -86,7 +86,7 @@ do
 	if [ "$APPLYFILTERONSTRUCTURE" -eq 0 ] || echo "`basename $table`" | grep $GREPPARAM "$FILTER" > /dev/null
 	then
 		echo " -> $TARGETDIR/$table.structure.sql";
-		mysqldump -u$USERNAME -p$PASSWORD -h$HOST $DATABASE $table --no-data | grep -v ^-- | sed -e 's/ AUTO_INCREMENT=[0-9]\+//' > "$TARGETDIR/$table.structure.sql"
+		mysqldump -u$USERNAME -p$PASSWORD -h$HOST $DATABASE $table --no-data | egrep -v ^-- | sed -e 's/ AUTO_INCREMENT=[0-9]\+//' > "$TARGETDIR/$table.structure.sql"
 	fi
 done;
 
@@ -95,7 +95,7 @@ echo "Exporting data"
 echo "--------------"
 for table in $TABLES ;
 do
-	if echo "`basename $table`" | grep $GREPPARAM "$FILTER" > /dev/null
+	if echo "`basename $table`" | egrep $GREPPARAM "$FILTER" > /dev/null
 	then
 		echo " -> $TARGETDIR/$table.data.sql";
 		mysqldump -u$USERNAME -p$PASSWORD -h$HOST $DATABASE $table --no-create-db --no-create-info --skip-extended-insert --order-by-primary | grep -v ^-- > "$TARGETDIR/$table.data.sql"

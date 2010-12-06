@@ -34,7 +34,7 @@ done
 
 # Database parameters
 if [ "$RETRIEVEDBDATA" -ne 0 ] ; then
-	echo "Retrieving db data from local.xml"
+	echo "Retrieving db data automatically"
 	. `cd -- "$(dirname -- "$0")" && pwd`/retrieve_dbdata.sh
 fi
 if [ "$USERNAME" == "" ] || [[ "$USERNAME" == *{{*}}* ]]; then echo "No username found"; exit 1; fi
