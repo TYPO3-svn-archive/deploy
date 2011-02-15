@@ -83,10 +83,10 @@ echo "Exporting structure"
 echo "-------------------"
 for table in $TABLES ;
 do
-	if [ "$APPLYFILTERONSTRUCTURE" -eq 0 ] || echo "`basename $table`" | grep $GREPPARAM "$FILTER" > /dev/null
+	if [ "$APPLYFILTERONSTRUCTURE" -eq 0 ] || echo "`basename $table`" | egrep $GREPPARAM "$FILTER" > /dev/null
 	then
 		echo " -> $TARGETDIR/$table.structure.sql";
-		mysqldump -u$USERNAME -p$PASSWORD -h$HOST $DATABASE $table --no-data | egrep -v ^-- | sed -e 's/ AUTO_INCREMENT=[0-9]\+//' > "$TARGETDIR/$table.structure.sql"
+		mysqldump -u$USERNAME -p$PASSWORD -h$HOST $DATABASE $table --no-data | grep -v ^-- | sed -e 's/ AUTO_INCREMENT=[0-9]\+//' > "$TARGETDIR/$table.structure.sql"
 	fi
 done;
 
